@@ -1,31 +1,32 @@
-﻿
+﻿@model Product
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
-<h2>Create Product</h2>
+<h2>Edit</h2>
 
-<form id="createProduct" >
+<form id="editProduct">
+    <input name="ID" value="@Model.ID" hidden/>
     <label>Name</label>
-    <input name="Name" />
+    <input name="Name" value="@Model.Name"/>
     <br />
     <label>Description</label>
-    <input name="Description" />
+    <input name="Description" value="@Model.Description"/>
     <br />
     <label>Price</label>
-    <input name="Price" />
+    <input name="Price" value="@Model.Price"/>
     <br />
-    <button id="saveBtn" type="button">Save</button>
+    <button id="updateBtn" type="button">Update</button>
 
 </form>
 
 <script>
-    $("#saveBtn").click(function () {
+    $("#updateBtn").click(function () {
 
         $.ajax({
             type: "POST",
-            url: '/Product/Create',
-            data: $("#createProduct").serialize()
+            url: '/Product/Edit',
+            data: $("#editProduct").serialize()
         })
             .done(function (response) {
                 $("#tableContainer").html(response);
