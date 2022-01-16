@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ClothBazar.DataBase
 {
-    public class CBContext : DbContext
+    public class CBContext : DbContext,IDisposable
     {
         public CBContext():base("ClothBazarConnection")
         {
