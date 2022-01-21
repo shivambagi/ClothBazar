@@ -19,6 +19,22 @@ namespace ClothBazar.Services
             }
         }
 
+        public List<Product> GetProducts(List<int> IDs)
+        {
+            List<Product> p = new List<Product>();
+
+            foreach (var id in IDs)
+            {
+                p.Add(GetProduct(id));
+            }
+
+            return p;
+            //using (var context = new CBContext())
+            //{
+            //    //return context.Products.Where(x => IDs.Contains(x.ID)).ToList();
+            //}
+        }
+
         public List<Product> GetProducts()
         {
             using (var context = new CBContext())

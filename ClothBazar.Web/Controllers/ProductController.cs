@@ -81,7 +81,6 @@ namespace ClothBazar.Web.Controllers
             existingProduct.Name = model.Name;
             existingProduct.Description = model.Description;
             existingProduct.Price = model.Price;
-            //newProduct.CategoryID = model.CategoryID; //use this for not allowing duplicated and fewer calls to DB,need to add property in Product class approach 1
             existingProduct.Category = categoryService.GetCategory(model.CategoryID);
 
             productsService.UpdateProduct(existingProduct);

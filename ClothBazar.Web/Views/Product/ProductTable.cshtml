@@ -61,6 +61,7 @@
                         <td class="wrap-td">
                             <button class="editBtn" data-id="@product.ID">Edit</button>
                             <button class="deleteBtn" data-id="@product.ID">Delete</button>
+                            <button class="addtoCart" data-id="@product.ID">Add To Cart</button>
                         </td>
                     </tr>
                 }
@@ -120,19 +121,55 @@
     });
 
     $(".deleteBtn").click(function () {
-        var confirmDelete = confirm("Are you sure you want to delete?")
-        if (confirmDelete) {
-            $.ajax({
-                type: 'POST',
-                url: '/Product/Delete',
-                data: { ID: $(this).attr("data-id") }
-            })
-                .done(function (response) {
-                    $("#tableContainer").html(response);
-                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
-                    alert("fail");
-                });
-        }        
+
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Product/Delete',
+                        data: { ID: $(this).attr("data-id") }
+                    })
+                        .done(function (response) {
+                            $("#tableContainer").html(response);
+                            swal("Your product has been deleted!", {
+                                icon: "success",
+                            });
+                        }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                            alert("fail");
+                        });
+                }
+            });
+
+        //var confirmDelete = confirm("Are you sure you want to delete?")
+        //if (confirmDelete) {
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: '/Product/Delete',
+        //        data: { ID: $(this).attr("data-id") }
+        //    })
+        //        .done(function (response) {
+        //            $("#tableContainer").html(response);
+        //        }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+        //            alert("fail");
+        //        });
+        //}        
+    });
+
+    var products = []; //use this to add products in cart (cookies)
+
+    $(".addtoCart").click(function () {
+        var productID = $(this).attr('data-id');
+
+        products.push(productID); //if .join('-') is not used the it will append with some charatcers for ',' join will help in identifying more easily
+
+        $.cookie('CartProducts', products.join('-'), { path: '/' });     
     });
 
     function focusAction() {
@@ -140,4 +177,6 @@
             scrollTop: $("#actionContainer").offset().top -100
         },1000);
     }
+
+    
 </script>
