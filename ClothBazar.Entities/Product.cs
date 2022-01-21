@@ -10,6 +10,7 @@ namespace ClothBazar.Entities
     {
         //ID,Name, Desc are inherited from BaseEntity class which are common to both Product and Category
         public decimal Price { get; set; }
-        public Category Category { get; set; }
+        //public int CategoryID { get; set; }//add this ID for saving the categories and not allowing duplicates approach 2
+        public virtual Category Category { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using ClothBazar.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,14 +23,20 @@ namespace ClothBazar.Services
         {
             using (var context = new CBContext())
             {
-                return context.Products.ToList();
+                
+                //return context.Products.ToList();
 
+                ////Use below code for eager loading, not mandatory to mark category property virtual in product class just make use of Include() 
+                return context.Products.Include(s => s.Category).ToList();
             }
         }
         public void SaveProduct(Product product)
         {
             using (var context = new CBContext())
             {
+                //// use below to not allow creation of new category while adding products (unchanged) approach 1
+                context.Entry(product.Category).State = System.Data.Entity.EntityState.Unchanged;
+
                 context.Products.Add(product);
                 context.SaveChanges();
             }

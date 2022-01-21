@@ -55,7 +55,7 @@
                 <div class="container-fluid clearfix container-width-93" id="site-header-inner">
                     <div id="logo" class="logo float-left">
                         <a href="index.html" title="logo">
-                            <img src="~/Content/images/logo.png" alt="image" width="107" height="24" data-retina="images/logo@2x.png" data-width="107" data-height="24">
+                            <img src="~/Content/images/logo.png" alt="image" width="107" height="24" data-retina="~/Content/images/logo@2x.png" data-width="107" data-height="24">
                         </a>
                     </div><!-- /.logo -->
                     <div class="mobile-button"><span></span></div>
@@ -161,7 +161,7 @@
                 </div><!-- /.container-fluid -->
             </header><!-- /header -->
         </div><!-- /.site-header-wrap -->
-
+        @RenderBody()
         <section class="flat-row mail-chimp">
             <div class="container">
                 <div class="row">
@@ -194,9 +194,6 @@
                 </div>
             </div>
         </section><!-- /.mail-chimp -->
-
-        @RenderBody()
-
         <!-- Footer -->
         <footer class="footer">
             <div class="container">

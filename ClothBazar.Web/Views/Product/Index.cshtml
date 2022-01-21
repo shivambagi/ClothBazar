@@ -3,16 +3,16 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <div id="tableContainer">
+        @{
+            Html.RenderAction("ProductTable");
 
-<div id="tableContainer">
-    @{
-        Html.RenderAction("ProductTable");
+            //Html.RenderAction("Create");
+        }
+    </div>
+    <hr />
+    <div id="actionContainer">
 
-        //Html.RenderAction("Create");
-    }
-</div>
-
-<div id="actionContainer">
-
+    </div>
 </div>

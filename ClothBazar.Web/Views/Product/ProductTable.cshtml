@@ -6,14 +6,32 @@
 
 <div>
     <form method="post">
-        <input id="searchTxt" type="search" />
-        <button id="searchBtn" type="button">Search</button>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Search</label>
+                    <input class="form-control" id="searchTxt" type="search" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Action</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button id="searchBtn" class="form-control btn btn-primary" type="button">Search</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button id="newBtn" class="form-control btn btn-primary" type="button">New</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
-    <button id="newBtn" type="button">New</button>
 </div>
 
 <div>
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <td>Product Name</td>
@@ -27,7 +45,16 @@
             {
                 <tr>
                     <td>@product.Name</td>
-                    <td>-</td>
+                    <td>
+                        @if (product.Category != null)
+                        {
+                            <text>@product.Category.Name</text>
+                        }
+                        else
+                        {
+                            <text>-</text>
+                        }
+                    </td>
                     <td>@product.Price</td>
                     <td>
                         <button class="editBtn" data-id="@product.ID">Edit</button>
