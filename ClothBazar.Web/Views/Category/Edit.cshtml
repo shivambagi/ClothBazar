@@ -2,12 +2,15 @@
 
 @{
     ViewBag.Title = "Edit";
+
+    var trueChecked = Model.isFeatured ? "checked" : string.Empty;
+    var falseChecked = !Model.isFeatured ? "checked" : string.Empty;
 }
 
 <h2>Edit Category</h2>
 
 <form method="post">
-    <input name="ID" value="@Model.ID" type="hidden"/>
+    <input name="ID" value="@Model.ID" type="hidden" />
 
     <label>Name</label>
     <input name="Name" value="@Model.Name" />
@@ -15,6 +18,10 @@
     <br />
     <label>Description</label>
     <input name="Description" value="@Model.Description" />
+    <br />
+    <label>Is Featured</label>
+    <input name="isFeatured" type="radio" value="True" trueChecked/> True
+    <input name="isFeatured" type="radio" value="False" falseChecked/> False
     <br />
     <button type="submit">Save</button>
 
