@@ -183,6 +183,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CategoryViewModels.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\ProductViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
@@ -224,6 +225,7 @@
     <Content Include="Content\images\blog\new-lastest-8-370x280.jpg" />
     <Content Include="Content\images\blog\new-lastest-9-370x280.jpg" />
     <Content Include="Content\images\blog\search_icon.png" />
+    <Content Include="Content\images\defaultimage.jpg" />
     <Content Include="Content\images\gallery\gallery-1-870x377.jpg" />
     <Content Include="Content\images\gallery\gallery-2-870x377.jpg" />
     <Content Include="Content\images\image-box\imgbox-1-1173x620.jpg" />
@@ -530,6 +532,7 @@
     <Content Include="Views\Product\ProductTable.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Category\_CategoryTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

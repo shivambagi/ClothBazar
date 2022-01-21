@@ -1,7 +1,4 @@
-﻿@model ProductSearchViewModel
-@{
-    ViewBag.Title = "ProductTable";
-}
+﻿@model ClothBazar.Web.ViewModels.CategorySearchViewModel
 
 
 <div>
@@ -34,42 +31,32 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <td>Product Name</td>
-                <td>Category</td>
-                <td>Price</td>
+                <td>Category Name</td>
+                <td>Products</td>
                 <td class="wrap-td">Actions</td>
             </tr>
         </thead>
         <tbody>
-            @if (Model.Products != null && Model.Products.Count > 0)
-            {
-                foreach (var product in Model.Products)
+            @if(Model.Categories != null && Model.Categories.Count > 0)
+            {            
+                foreach (var category in Model.Categories)
                 {
                     <tr>
-                        <td>@product.Name</td>
+                        <td>@category.Name</td>
                         <td>
-                            @if (product.Category != null)
-                            {
-                                <text>@product.Category.Name</text>
-                            }
-                            else
-                            {
-                                <text>-</text>
-                            }
+                            @category.Products.Count
                         </td>
-                        <td>@product.Price</td>
                         <td class="wrap-td">
-                            <button class="editBtn" data-id="@product.ID">Edit</button>
-                            <button class="deleteBtn" data-id="@product.ID">Delete</button>
+                            <button class="editBtn" data-id="@category.ID">Edit</button>
+                            <button class="deleteBtn" data-id="@category.ID">Delete</button>
                         </td>
                     </tr>
                 }
             }
             else
             {
-                <tr><td colspan="4" class="text-danger">No products found</td></tr>
+                <tr><td colspan="3" class="text-danger">No Categories found</td></tr>
             }
-
         </tbody>
     </table>
 </div>
@@ -80,8 +67,8 @@
     $("#searchBtn").click(function () {
         var searchValue = $("#searchTxt").val();
         $.ajax({
-            url: '/Product/ProductTable',
-            data: { search : searchValue }
+            url: '/Category/CategoryTable',
+            data: { search: searchValue }
         })
             .done(function (response) {
                 $("#tableContainer").html(response);
@@ -89,11 +76,11 @@
                 alert("fail");
             });
     });
-    
+
     $("#newBtn").click(function () {
 
         $.ajax({
-            url: '/Product/Create',
+            url: '/Category/Create',
         })
             .done(function (response) {
                 $("#actionContainer").html(response);
@@ -107,8 +94,8 @@
     $(".editBtn").click(function () {
 
         $.ajax({
-            url: '/Product/Edit',
-            data: { ID: $(this).attr("data-id")}
+            url: '/Category/Edit',
+            data: { ID: $(this).attr("data-id") }
         })
             .done(function (response) {
                 $("#actionContainer").html(response);
@@ -124,7 +111,7 @@
         if (confirmDelete) {
             $.ajax({
                 type: 'POST',
-                url: '/Product/Delete',
+                url: '/Category/Delete',
                 data: { ID: $(this).attr("data-id") }
             })
                 .done(function (response) {
@@ -132,12 +119,12 @@
                 }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
                     alert("fail");
                 });
-        }        
+        }
     });
 
     function focusAction() {
         $('html, body').animate({
-            scrollTop: $("#actionContainer").offset().top -100
-        },1000);
+            scrollTop: $("#actionContainer").offset().top - 100
+        }, 500);
     }
 </script>

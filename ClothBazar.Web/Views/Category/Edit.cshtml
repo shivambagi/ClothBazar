@@ -1,15 +1,18 @@
-﻿@model ClothBazar.Entities.Category
+﻿@model EditCategoryViewModel
 
 @{
     ViewBag.Title = "Edit";
 
     var trueChecked = Model.isFeatured ? "checked" : string.Empty;
     var falseChecked = !Model.isFeatured ? "checked" : string.Empty;
+
+    var imageURL = !string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : "/Content/images/defaultimage.jpg";
+
 }
 
 <h2>Edit Category</h2>
 
-<form method="post">
+@*<form method="post">
     <input name="ID" value="@Model.ID" type="hidden" />
 
     <label>Name</label>
@@ -20,9 +23,94 @@
     <input name="Description" value="@Model.Description" />
     <br />
     <label>Is Featured</label>
-    <input name="isFeatured" type="radio" value="True" trueChecked/> True
-    <input name="isFeatured" type="radio" value="False" falseChecked/> False
+    <input name="isFeatured" type="radio" value="True" @trueChecked/> True
+    <input name="isFeatured" type="radio" value="False" @falseChecked/> False
     <br />
     <button type="submit">Save</button>
 
+</form>*@
+
+<form id="editCategory">
+    <input name="ID" value="@Model.ID" type="hidden" />
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" name="Name" value="@Model.Name" />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input class="form-control" name="Description" value="@Model.Description" />
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input class="form-control" id="ImageURL" name="ImageURL" type="hidden" value="@Model.ImageURL" />
+                <input class="form-control" id="imageUpload" name="Image" type="file" accept=".png, .jpg" />                
+            </div>
+            <div class="form-group">
+                <label>Is Featured</label>
+                <div class="input-group">
+                    <div class="form-control radio">
+                        <label><input name="isFeatured" type="radio" value="True" @trueChecked /> True</label>
+                    </div>
+                    <div class="form-control radio">
+                        <label><input name="isFeatured" type="radio" value="False" @falseChecked /> False</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumb">
+                <img class="img-thumbnail img-fluid" id="categoryImage" src="@imageURL" />
+            </div>
+        </div>
+    </div>
+
+    <button id="updateBtn" class="btn btn-primary" type="button">Update</button>
 </form>
+
+<script>
+    $("#imageUpload").change(function () {
+        /*debugger;*/
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+        $.ajax({
+            type: 'POST',
+            data: formData,
+            url: '/Shared/UploadImage',
+            dataType: 'json',
+            contentType: false,
+            processData: false
+        }).done(function (response) {
+            /*debugger;*/
+            console.log(response);
+
+            if (response.Success == true) {
+                $("#ImageURL").val(response.ImageURL);
+                $("#categoryImage").attr("src", response.ImageURL);
+            }
+        })
+    });
+
+    $("#updateBtn").click(function () {
+
+        $.ajax({
+            type: "POST",
+            url: '/Category/Edit',
+            data: $("#editCategory").serialize()
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+                $("#actionContainer").html("");
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+</script>

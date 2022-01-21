@@ -12,7 +12,7 @@ namespace ClothBazar.Web.Controllers
     public class ProductController : Controller
     {
         ProductsService productsService = new ProductsService();
-        
+        CategoriesService categoryService = new CategoriesService();
         public ActionResult Index()
         {
             return View();
@@ -20,30 +20,32 @@ namespace ClothBazar.Web.Controllers
 
         public ActionResult ProductTable(string search)
         {
-            var products = productsService.GetProducts();
+            ProductSearchViewModel model = new ProductSearchViewModel();
+
+            model.Products = productsService.GetProducts();
             if(string.IsNullOrEmpty(search) == false)
             {
-                products = products.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
+                model.SearchTerm = search;
+                model.Products = model.Products.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
             }
             
-            return PartialView(products);
+            return PartialView(model);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
-            CategoriesService categoryService = new CategoriesService();
+            NewProductViewModel model = new NewProductViewModel();
 
-            var categories = categoryService.GetCategories();
+            //var categories = categoryService.GetCategories();
+            model.AvailableCategories = categoryService.GetCategories();
 
-            return PartialView(categories);
+            return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult Create(NewCategoryViewModel model)
+        public ActionResult Create(NewProductViewModel model)
         {
-            CategoriesService categoryService = new CategoriesService();
-
             var newProduct = new Product();
             newProduct.Name = model.Name;
             newProduct.Description = model.Description;
@@ -58,14 +60,31 @@ namespace ClothBazar.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int ID)
         {
+            EditProductViewModel model = new EditProductViewModel();
+
             var product = productsService.GetProduct(ID);
-            return PartialView(product);
+
+            model.ID = product.ID;
+            model.Name = product.Name;
+            model.Description = product.Description;
+            model.Price = product.Price;
+            model.CategoryID = product.Category != null ? product.Category.ID : 0;
+            model.AvailableCategories = categoryService.GetCategories();
+
+            return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(EditProductViewModel model)
         {
-            productsService.UpdateProduct(product);
+            var existingProduct = productsService.GetProduct(model.ID);
+            existingProduct.Name = model.Name;
+            existingProduct.Description = model.Description;
+            existingProduct.Price = model.Price;
+            //newProduct.CategoryID = model.CategoryID; //use this for not allowing duplicated and fewer calls to DB,need to add property in Product class approach 1
+            existingProduct.Category = categoryService.GetCategory(model.CategoryID);
+
+            productsService.UpdateProduct(existingProduct);
             return RedirectToAction("ProductTable");
         }
 
