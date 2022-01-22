@@ -10,7 +10,7 @@ namespace ClothBazar.Web.Controllers
 {
     public class ShopController : Controller
     {
-        ProductsService productService = new ProductsService();
+        ProductsService productService = ProductsService.Instance;
         // GET: Shop
         public ActionResult Checkout()
         {

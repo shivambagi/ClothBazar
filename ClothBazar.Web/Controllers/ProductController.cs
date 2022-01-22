@@ -11,18 +11,21 @@ namespace ClothBazar.Web.Controllers
 {
     public class ProductController : Controller
     {
-        ProductsService productsService = new ProductsService();
+        ProductsService productsService = ProductsService.Instance; // you can create a single object and use it directly for calling class methods or follow below category service example
         CategoriesService categoryService = new CategoriesService();
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult ProductTable(string search)
+        public ActionResult ProductTable(string search, int? pageNo)
         {
             ProductSearchViewModel model = new ProductSearchViewModel();
 
-            model.Products = productsService.GetProducts();
+            //model.PageNo = pageNo.HasValue ? pageNo.Value : 1; //try in html by disabling button or /hide previous btn using condition
+            model.PageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+
+            model.Products = productsService.GetProducts(model.PageNo);
             if(string.IsNullOrEmpty(search) == false)
             {
                 model.SearchTerm = search;

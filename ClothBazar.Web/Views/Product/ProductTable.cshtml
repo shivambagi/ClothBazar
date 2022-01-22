@@ -73,11 +73,33 @@
 
         </tbody>
     </table>
+    <div>
+        @if (Model.PageNo != 1)
+        {
+            <button class="pageButtons" data-pageNo="@(Model.PageNo - 1 )">Previous</button>
+        }
+        
+        <button class="pageButtons" data-pageNo="@(Model.PageNo + 1 )">Next</button>
+        
+    </div>
 </div>
 
 
 
 <script>
+    $(".pageButtons").click(function () {
+        var searchValue = $("#searchTxt").val();
+        $.ajax({
+            url: '/Product/ProductTable',
+            data: { pageNo: $(this).attr("data-pageNo")}
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
     $("#searchBtn").click(function () {
         var searchValue = $("#searchTxt").val();
         $.ajax({

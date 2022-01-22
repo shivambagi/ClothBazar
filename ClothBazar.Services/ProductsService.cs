@@ -11,6 +11,25 @@ namespace ClothBazar.Services
 {
     public class ProductsService
     {
+        #region Singleton
+        //public static property which will be returned after checking if an instance exists or not
+        public static ProductsService Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ProductsService();
+                }
+                return instance;
+            }
+        }
+        private static ProductsService instance { get; set; } // static private property,this is going to hold reference to single created instance
+        private ProductsService() //private and parameterless ctor
+        {
+        }
+        #endregion
+
         public Product GetProduct(int ID)
         {
             using (var context = new CBContext())
@@ -35,15 +54,21 @@ namespace ClothBazar.Services
             //}
         }
 
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(int pageNo)
         {
+            int pageSize = 5;
+
             using (var context = new CBContext())
             {
-                
+
                 //return context.Products.ToList();
 
                 ////Use below code for eager loading, not mandatory to mark category property virtual in product class just make use of Include() 
-                return context.Products.Include(s => s.Category).ToList();
+                //return context.Products.Include(s => s.Category).ToList();
+
+                ////for pagination modified above return with take and skip
+                ////orderby(mandatory for skip)-->skip-->take-->INclude-->List
+                return context.Products.OrderBy(s => s.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(s => s.Category).ToList();
             }
         }
         public void SaveProduct(Product product)
