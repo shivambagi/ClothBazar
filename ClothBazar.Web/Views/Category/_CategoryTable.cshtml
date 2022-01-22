@@ -67,7 +67,7 @@
     $("#searchBtn").click(function () {
         var searchValue = $("#searchTxt").val();
         $.ajax({
-            url: '/Category/CategoryTable',
+            url: '@Url.Action("CategoryTable", "Category")',//'/Category/CategoryTable',//Using URL helper instead of hardcoding
             data: { search: searchValue }
         })
             .done(function (response) {
