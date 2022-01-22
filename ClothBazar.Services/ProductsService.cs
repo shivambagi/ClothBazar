@@ -64,11 +64,11 @@ namespace ClothBazar.Services
                 //return context.Products.ToList();
 
                 ////Use below code for eager loading, not mandatory to mark category property virtual in product class just make use of Include() 
-                //return context.Products.Include(s => s.Category).ToList();
+                return context.Products.Include(s => s.Category).ToList();
 
                 ////for pagination modified above return with take and skip
                 ////orderby(mandatory for skip)-->skip-->take-->INclude-->List
-                return context.Products.OrderBy(s => s.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(s => s.Category).ToList();
+                //return context.Products.OrderBy(s => s.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(s => s.Category).ToList();
             }
         }
         public void SaveProduct(Product product)

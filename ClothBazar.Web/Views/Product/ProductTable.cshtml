@@ -4,13 +4,16 @@
 }
 
 
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
 <div>
     <form method="post">
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
                     <label>Search</label>
-                    <input class="form-control" id="searchTxt" type="search" value="@Model.SearchTerm"/>
+                    <input class="form-control" id="searchTxt" type="search" value="@Model.SearchTerm" />
                 </div>
             </div>
             <div class="col-md-4">
@@ -31,7 +34,7 @@
 </div>
 
 <div>
-    <table class="table table-striped">
+    <table id="ProductsTable" class="table table-striped">
         <thead>
             <tr>
                 <td>Product Name</td>
@@ -74,24 +77,27 @@
         </tbody>
     </table>
     <div>
-        @if (Model.PageNo != 1)
+        @*@if (Model.PageNo != 1)
         {
             <button class="pageButtons" data-pageNo="@(Model.PageNo - 1 )">Previous</button>
         }
-        
-        <button class="pageButtons" data-pageNo="@(Model.PageNo + 1 )">Next</button>
-        
+
+        <button class="pageButtons" data-pageNo="@(Model.PageNo + 1 )">Next</button>*@
+
     </div>
 </div>
 
 
 
 <script>
+
+    $('#ProductsTable').DataTable();//add this just to display table sorting,pagination at specified id
+
     $(".pageButtons").click(function () {
         var searchValue = $("#searchTxt").val();
         $.ajax({
             url: '/Product/ProductTable',
-            data: { pageNo: $(this).attr("data-pageNo")}
+            data: { pageNo: $(this).attr("data-pageNo") }
         })
             .done(function (response) {
                 $("#tableContainer").html(response);
@@ -104,7 +110,7 @@
         var searchValue = $("#searchTxt").val();
         $.ajax({
             url: '/Product/ProductTable',
-            data: { search : searchValue }
+            data: { search: searchValue }
         })
             .done(function (response) {
                 $("#tableContainer").html(response);
@@ -112,7 +118,7 @@
                 alert("fail");
             });
     });
-    
+
     $("#newBtn").click(function () {
 
         $.ajax({
@@ -131,7 +137,7 @@
 
         $.ajax({
             url: '/Product/Edit',
-            data: { ID: $(this).attr("data-id")}
+            data: { ID: $(this).attr("data-id") }
         })
             .done(function (response) {
                 $("#actionContainer").html(response);
@@ -181,7 +187,7 @@
         //        }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
         //            alert("fail");
         //        });
-        //}        
+        //}
     });
 
     var products = []; //use this to add products in cart (cookies)
@@ -191,14 +197,14 @@
 
         products.push(productID); //if .join('-') is not used the it will append with some charatcers for ',' join will help in identifying more easily
 
-        $.cookie('CartProducts', products.join('-'), { path: '/' });     
+        $.cookie('CartProducts', products.join('-'), { path: '/' });
     });
 
     function focusAction() {
         $('html, body').animate({
-            scrollTop: $("#actionContainer").offset().top -100
-        },1000);
+            scrollTop: $("#actionContainer").offset().top - 100
+        }, 1000);
     }
 
-    
+
 </script>
