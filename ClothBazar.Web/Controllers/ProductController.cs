@@ -12,7 +12,7 @@ namespace ClothBazar.Web.Controllers
     public class ProductController : Controller
     {
         ProductsService productsService = ProductsService.Instance; // you can create a single object and use it directly for calling class methods or follow below category service example
-        CategoriesService categoryService = new CategoriesService();
+        //CategoriesService categoryService = new CategoriesService();
         public ActionResult Index()
         {
             return View();
@@ -41,7 +41,7 @@ namespace ClothBazar.Web.Controllers
             NewProductViewModel model = new NewProductViewModel();
 
             //var categories = categoryService.GetCategories();
-            model.AvailableCategories = categoryService.GetCategories();
+            model.AvailableCategories = CategoriesService.Instance.GetCategories();
 
             return PartialView(model);
         }
@@ -54,7 +54,9 @@ namespace ClothBazar.Web.Controllers
             newProduct.Description = model.Description;
             newProduct.Price = model.Price;
             //newProduct.CategoryID = model.CategoryID; //use this for not allowing duplicated and fewer calls to DB,need to add property in Product class approach 1
-            newProduct.Category = categoryService.GetCategory(model.CategoryID);
+            newProduct.Category = CategoriesService.Instance.GetCategory(model.CategoryID);
+            newProduct.ImageURL = model.ImageURL;
+
             productsService.SaveProduct(newProduct);
 
             return RedirectToAction("ProductTable");
@@ -72,7 +74,8 @@ namespace ClothBazar.Web.Controllers
             model.Description = product.Description;
             model.Price = product.Price;
             model.CategoryID = product.Category != null ? product.Category.ID : 0;
-            model.AvailableCategories = categoryService.GetCategories();
+            model.AvailableCategories = CategoriesService.Instance.GetCategories();
+            model.ImageURL = product.ImageURL;
 
             return PartialView(model);
         }
@@ -84,7 +87,8 @@ namespace ClothBazar.Web.Controllers
             existingProduct.Name = model.Name;
             existingProduct.Description = model.Description;
             existingProduct.Price = model.Price;
-            existingProduct.Category = categoryService.GetCategory(model.CategoryID);
+            existingProduct.Category = CategoriesService.Instance.GetCategory(model.CategoryID);
+            existingProduct.ImageURL = model.ImageURL;
 
             productsService.UpdateProduct(existingProduct);
             return RedirectToAction("ProductTable");

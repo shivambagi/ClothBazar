@@ -11,6 +11,25 @@ namespace ClothBazar.Services
 {
     public class CategoriesService
     {
+        #region Singleton
+        //public static property which will be returned after checking if an instance exists or not
+        public static CategoriesService Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new CategoriesService();
+                }
+                return instance;
+            }
+        }
+        private static CategoriesService instance { get; set; } // static private property,this is going to hold reference to single created instance
+        private CategoriesService() //private and parameterless ctor
+        {
+        }
+        #endregion
+
         public Category GetCategory(int ID)
         {
             using (var context = new CBContext())

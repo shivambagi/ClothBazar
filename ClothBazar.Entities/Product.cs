@@ -12,5 +12,6 @@ namespace ClothBazar.Entities
         public decimal Price { get; set; }
         //public int CategoryID { get; set; }//add this ID for saving the categories and not allowing duplicates approach 2
         public virtual Category Category { get; set; }
+        public string ImageURL { get; set; }
     }
 }

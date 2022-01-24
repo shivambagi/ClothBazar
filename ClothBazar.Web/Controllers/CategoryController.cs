@@ -11,7 +11,7 @@ namespace ClothBazar.Web.Controllers
 {
     public class CategoryController : Controller
     {
-        CategoriesService categoryService = new CategoriesService();
+        CategoriesService categoryService = CategoriesService.Instance;
 
         [HttpGet]
         public ActionResult Index()
