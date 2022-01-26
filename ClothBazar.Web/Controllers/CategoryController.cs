@@ -15,22 +15,35 @@ namespace ClothBazar.Web.Controllers
 
         [HttpGet]
         public ActionResult Index()
-        {            
+        {
             return View();
         }
-        public ActionResult CategoryTable(string search)
+        public ActionResult CategoryTable(string search, int? pageNo)
         {
             CategorySearchViewModel model = new CategorySearchViewModel();
+            model.SearchTerm = search;
 
-            model.Categories = categoryService.GetCategories();
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+            int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+            var totalRecords = categoryService.GetCategoriesCount(search);
 
-            if (string.IsNullOrEmpty(search) == false)
+            model.Categories = categoryService.GetCategories(search, pageNo.Value);
+
+            if (model.Categories != null)
             {
-                model.SearchTerm = search;
-                model.Categories = model.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
-            }
+                //if (string.IsNullOrEmpty(search) == false)
+                //{
+                //    model.SearchTerm = search;
+                //    model.Categories = model.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
+                //}
+                model.Pager = new Pager(totalRecords, pageNo, pageSize);            
 
-            return PartialView("_CategoryTable", model);
+                return PartialView("_CategoryTable", model);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
 
         [HttpGet]
@@ -82,7 +95,7 @@ namespace ClothBazar.Web.Controllers
 
             categoryService.UpdateCategory(existingCategory);
             return RedirectToAction("CategoryTable");
-        }        
+        }
 
         [HttpPost]
         public ActionResult Delete(int ID)

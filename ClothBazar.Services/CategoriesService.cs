@@ -37,13 +37,42 @@ namespace ClothBazar.Services
                 return context.Categories.Find(ID);
             }
         }
-        
-        public List<Category> GetCategories()
+
+        public int GetCategoriesCount(string search)
         {
             using (var context = new CBContext())
             {
-                return context.Categories.Include(x=>x.Products).ToList();
-                
+                if (string.IsNullOrEmpty(search) == false)
+                {
+                    return context.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).Count();
+                }
+                return context.Categories.Count();
+
+            }
+        }
+
+
+        public List<Category> GetAllCategories()
+        {
+            using (var context = new CBContext())
+            {                
+                return context.Categories.ToList();
+            }
+        }
+
+        public List<Category> GetCategories(string search,int pageNo)
+        {
+            int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            using (var context = new CBContext())
+            {
+                if (string.IsNullOrEmpty(search) == false)
+                {
+                    //combination of serach and paging linq query
+                    return context.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower()))
+                        .OrderBy(x => x.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(x => x.Products).ToList();
+                }
+                return context.Categories.OrderBy(x => x.ID).Skip((pageNo -1) * pageSize).Take(pageSize).Include(x=>x.Products).ToList();                
             }
         }
 

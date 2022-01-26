@@ -41,7 +41,7 @@ namespace ClothBazar.Web.Controllers
             NewProductViewModel model = new NewProductViewModel();
 
             //var categories = categoryService.GetCategories();
-            model.AvailableCategories = CategoriesService.Instance.GetCategories();
+            model.AvailableCategories = CategoriesService.Instance.GetAllCategories();
 
             return PartialView(model);
         }
@@ -74,7 +74,7 @@ namespace ClothBazar.Web.Controllers
             model.Description = product.Description;
             model.Price = product.Price;
             model.CategoryID = product.Category != null ? product.Category.ID : 0;
-            model.AvailableCategories = CategoriesService.Instance.GetCategories();
+            model.AvailableCategories = CategoriesService.Instance.GetAllCategories();
             model.ImageURL = product.ImageURL;
 
             return PartialView(model);
