@@ -3,6 +3,7 @@ using ClothBazar.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,15 +72,68 @@ namespace ClothBazar.Services
                 return context.Products.OrderBy(s => s.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(s => s.Category).ToList();
             }
         }
+
+        public List<Product> GetProducts(int pageNo, int pageSize)//overloaded method
+        {
+            //pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            using (var context = new CBContext())
+            {
+                return context.Products.OrderBy(s => s.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(s => s.Category).ToList();
+            }
+        }
+
+        public List<Product> GetProductsByCategory(int categoryID, int pageSize)
+        {
+            using (var context = new CBContext())
+            {
+                return context.Products.Where(x => x.Category.ID == categoryID).OrderByDescending(x => x.ID).Take(pageSize).Include(x => x.Category).ToList();
+            }
+        }
+
+        public List<Product> GetLatestProducts(int numberOfProducts)
+        {
+            using (var context = new CBContext())
+            {
+
+                //return context.Products.ToList();
+
+                ////Use below code for eager loading, not mandatory to mark category property virtual in product class just make use of Include() 
+                return context.Products.OrderByDescending(x=> x.ID).Take(numberOfProducts).Include(s => s.Category).ToList();
+            }
+        }
+
+
         public void SaveProduct(Product product)
         {
             using (var context = new CBContext())
             {
-                //// use below to not allow creation of new category while adding products (unchanged) approach 1
-                context.Entry(product.Category).State = System.Data.Entity.EntityState.Unchanged;
 
-                context.Products.Add(product);
-                context.SaveChanges();
+                try
+                {
+                    //// use below to not allow creation of new category while adding products (unchanged) approach 1
+                    context.Entry(product.Category).State = System.Data.Entity.EntityState.Unchanged;
+
+                    context.Products.Add(product);
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    throw;
+                }
+
+
+               
             }
         }
 

@@ -73,6 +73,10 @@
     <Compile Include="Migrations\202201261628338_addedBaseValidations_Price_in_product.Designer.cs">
       <DependentUpon>202201261628338_addedBaseValidations_Price_in_product.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201270926272_minor_change.cs" />
+    <Compile Include="Migrations\202201270926272_minor_change.Designer.cs">
+      <DependentUpon>202201270926272_minor_change.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -104,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202201261628338_addedBaseValidations_Price_in_product.resx">
       <DependentUpon>202201261628338_addedBaseValidations_Price_in_product.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201270926272_minor_change.resx">
+      <DependentUpon>202201270926272_minor_change.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
