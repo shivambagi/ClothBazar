@@ -8,34 +8,34 @@
 <h2>Create Category</h2>
 
 @*<form method="post">
-    <label>Name</label>
-    <input name="Name" />
-    <br />
-    <label>Description</label>
-    <input name="Description" />
-    <br />
-    <label>Image</label>
-    <input id="ImageURL" name="ImageURL" type="hidden" />
-    <input id="imageUpload" name="Image" type="file" accept=".png .jpg" />
+        <label>Name</label>
+        <input name="Name" />
+        <br />
+        <label>Description</label>
+        <input name="Description" />
+        <br />
+        <label>Image</label>
+        <input id="ImageURL" name="ImageURL" type="hidden" />
+        <input id="imageUpload" name="Image" type="file" accept=".png .jpg" />
 
-    <div class="thumb">
-        <img id="categoryImage" />
-    </div>
-    <br />
+        <div class="thumb">
+            <img id="categoryImage" />
+        </div>
+        <br />
 
-    <label>Is Featured</label>
-    <input name="isFeatured" type="radio" value="True" /> True
-    <input name="isFeatured" type="radio" value="False" /> False
-    <br />
-    <button type="submit">Save</button>
+        <label>Is Featured</label>
+        <input name="isFeatured" type="radio" value="True" /> True
+        <input name="isFeatured" type="radio" value="False" /> False
+        <br />
+        <button type="submit">Save</button>
 
-</form>*@
+    </form>*@
 
 <form id="createCategory">
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                <label>Name</label>
+                <label>Name <span class="text-danger">*</span></label>
                 <input class="form-control" name="Name" />
             </div>
             <div class="form-group">
@@ -99,20 +99,63 @@
         })
     });
 
-    $("#saveBtn").click(function () {
+    $('#createCategory').validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 500
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required',
+                minlength: 'Minimum length is 3',
+                maxlength: 'Maximum length is 50'
+            },
+            Description: {
+                maxlength: 'Maximum length is 500'
+            }
+        }
+    });
 
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Create", "Category")',//'/Category/Create',
-            data: $("#createCategory").serialize()
-        })
-            .done(function (response) {
-                $("#tableContainer").html(response);
-                $("#actionContainer").html("");
-                focusAction("tableContainer");
-            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
-                alert("fail");
-            });
+
+
+    $("#saveBtn").click(function () {
+        if ($("#createCategory").valid()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create", "Category")',//'/Category/Create',
+                data: $("#createCategory").serialize()
+            })
+                .done(function (response) {
+                    $("#tableContainer").html(response);
+                    $("#actionContainer").html("");
+                    focusAction("tableContainer");
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Something went wrong",
+                        text: "please enter reqiuried ddteials",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                });
+        }
+        else
+        {
+            swal({
+                title: "JS Something went wrong",
+                text: "please enter reqiuried ddteials",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
+        
     });
 
     $("#cancelBtn").click(function () {

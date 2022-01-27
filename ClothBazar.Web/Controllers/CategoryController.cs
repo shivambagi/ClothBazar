@@ -36,7 +36,7 @@ namespace ClothBazar.Web.Controllers
                 //    model.SearchTerm = search;
                 //    model.Categories = model.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).ToList();
                 //}
-                model.Pager = new Pager(totalRecords, pageNo, pageSize);            
+                model.Pager = new Pager(totalRecords, pageNo, pageSize);
 
                 return PartialView("_CategoryTable", model);
             }
@@ -57,15 +57,22 @@ namespace ClothBazar.Web.Controllers
         [HttpPost]
         public ActionResult Create(NewCategoryViewModel model)
         {
-            var newCategory = new Category();
-            newCategory.Name = model.Name;
-            newCategory.Description = model.Description;
-            newCategory.ImageURL = model.ImageURL;
-            newCategory.isFeatured = model.isFeatured;
+            if (ModelState.IsValid)
+            {
+                var newCategory = new Category();
+                newCategory.Name = model.Name;
+                newCategory.Description = model.Description;
+                newCategory.ImageURL = model.ImageURL;
+                newCategory.isFeatured = model.isFeatured;
 
-            categoryService.SaveCategory(newCategory);
+                categoryService.SaveCategory(newCategory);
 
-            return RedirectToAction("CategoryTable");
+                return RedirectToAction("CategoryTable");
+            }
+            else
+            {
+                return new HttpStatusCodeResult(500);
+            }
         }
 
         [HttpGet]
