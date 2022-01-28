@@ -14,25 +14,41 @@ namespace ClothBazar.Web.Controllers
         CategoriesService categoryService = CategoriesService.Instance;
         // GET: Shop
 
-        public ActionResult Index(string searchTerm,int? minimumPrice,int? maximumPrice,int? categoryID,int? sortBy)
+        public ActionResult Index(string searchTerm,int? minimumPrice,int? maximumPrice,int? categoryID,int? sortBy,int? pageNo)
         {
             ShopViewModel model = new ShopViewModel();
+
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+            int pageSize = 10;
 
             model.FeaturedCategories = categoryService.GetFeaturedCategories();
             model.MaximumPrice = productService.GetMaximumPrice();
 
-            model.Products = productService.SearchProducts(searchTerm,minimumPrice,maximumPrice,categoryID, sortBy);
+            model.Products = productService.SearchProducts(searchTerm,minimumPrice,maximumPrice,categoryID, sortBy, pageNo.Value, pageSize);
 
             model.SortBy = sortBy;
+
+            model.CategoryID = categoryID;
+
+            int totalCount = productService.SearchProductsCount(searchTerm, minimumPrice, maximumPrice, categoryID, sortBy, pageNo.Value);
+
+            model.Pager = new Pager(totalCount,pageNo);
 
             return View(model);
         }
 
-        public ActionResult FilterProducts(string searchTerm, int? minimumPrice, int? maximumPrice, int? categoryID, int? sortBy)
+        public ActionResult FilterProducts(string searchTerm, int? minimumPrice, int? maximumPrice, int? categoryID, int? sortBy, int? pageNo)
         {
             FilterProductsViewModel model = new FilterProductsViewModel();
 
-            model.Products = productService.SearchProducts(searchTerm, minimumPrice, maximumPrice, categoryID, sortBy);
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+            int pageSize = 10;
+
+            model.Products = productService.SearchProducts(searchTerm, minimumPrice, maximumPrice, categoryID, sortBy, pageNo.Value, pageSize);
+
+            int totalCount = productService.SearchProductsCount(searchTerm, minimumPrice, maximumPrice, categoryID, sortBy, pageNo.Value);
+
+            model.Pager = new Pager(totalCount, pageNo);
 
             return PartialView(model);
         }

@@ -2,7 +2,7 @@
 
 @if (Model != null && Model.Product != null)
 {
-    var defaultImageURL = "/Content/images/system/placeholder-image.png";
+    var defaultImageURL = "/Content/images/defaultimage.jpg";
 
     var imageURL = string.IsNullOrEmpty(Model.Product.ImageURL) ? defaultImageURL : Model.Product.ImageURL;
     <!-- Page title -->
