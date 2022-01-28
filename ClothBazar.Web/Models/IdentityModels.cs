@@ -21,7 +21,7 @@ namespace ClothBazar.Web.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("ClothBazarConnection", throwIfV1Schema: false) //DefaultConnection changed to ClothBazarConnection
         {
         }
 

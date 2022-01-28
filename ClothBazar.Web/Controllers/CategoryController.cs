@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ClothBazar.Web.Controllers
 {
+    //[Authorize(Roles ="Admin")]
     public class CategoryController : Controller
     {
         CategoriesService categoryService = CategoriesService.Instance;

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace ClothBazar.Web.Controllers
 {
+    [Authorize]
     public class ShopController : Controller
     {
         ProductsService productService = ProductsService.Instance;
