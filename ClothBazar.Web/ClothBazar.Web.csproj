@@ -179,6 +179,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201280658533_InitialCreate.cs" />
+    <Compile Include="Migrations\202201280658533_InitialCreate.Designer.cs">
+      <DependentUpon>202201280658533_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201311647177_added_NAmeAddress_to_IdentityModel.cs" />
+    <Compile Include="Migrations\202201311647177_added_NAmeAddress_to_IdentityModel.Designer.cs">
+      <DependentUpon>202201311647177_added_NAmeAddress_to_IdentityModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -567,6 +576,14 @@
       <Project>{5ED43437-D4D4-4294-A31F-A72281F44D5C}</Project>
       <Name>ClothBazar.Services</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202201280658533_InitialCreate.resx">
+      <DependentUpon>202201280658533_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201311647177_added_NAmeAddress_to_IdentityModel.resx">
+      <DependentUpon>202201311647177_added_NAmeAddress_to_IdentityModel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -36,10 +36,10 @@
                             Sort By
                         </h5>
                         <ul>
-                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.Default, categoryID = Model.CategoryID })" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.Default ? "active" : string.Empty : string.Empty)">Default - Newest</a></li>
-                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.Popularity, categoryID = Model.CategoryID  })" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.Popularity ? "active" : string.Empty : string.Empty)">Popularity</a></li>
-                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.PriceLowToHigh, categoryID = Model.CategoryID  })" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.PriceLowToHigh ? "active" : string.Empty : string.Empty)">Price: low to high</a></li>
-                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.PriceHighToLow, categoryID = Model.CategoryID  })" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.PriceHighToLow ? "active" : string.Empty : string.Empty)">Price: high to low</a></li>
+                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.Default, categoryID = Model.CategoryID })" style="cursor:pointer;" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.Default ? "active" : string.Empty : string.Empty)">Default - Newest</a></li>
+                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.Popularity, categoryID = Model.CategoryID  })" style="cursor:pointer;" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.Popularity ? "active" : string.Empty : string.Empty)">Popularity</a></li>
+                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.PriceLowToHigh, categoryID = Model.CategoryID  })" style="cursor:pointer;" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.PriceLowToHigh ? "active" : string.Empty : string.Empty)">Price: low to high</a></li>
+                            <li><a data-href="@Url.Action("FilterProducts", "Shop", new { sortBy = (int)SortByEnums.PriceHighToLow, categoryID = Model.CategoryID  })" style="cursor:pointer;" class="dataLink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortByEnums.PriceHighToLow ? "active" : string.Empty : string.Empty)">Price: high to low</a></li>
                         </ul>
                     </div>
                     <div class="widget widget_tag">
@@ -47,9 +47,11 @@
                             Featured Categories
                         </h5>
                         <div class="tag-list">
+                            <a href="@Url.Action("Index", "Shop")">All Products</a>
+
                             @foreach (var category in Model.FeaturedCategories)
                             {
-                                <a data-href="@Url.Action("FilterProducts", "Shop", new { categoryID = category.ID, sortBy = Model.SortBy })" class="dataLink @(Model.CategoryID.HasValue && Model.CategoryID.Value == category.ID ? "active" : string.Empty)">@category.Name</a>
+                                <a data-href="@Url.Action("FilterProducts", "Shop", new { categoryID = category.ID, sortBy = Model.SortBy })" style="cursor:pointer;" class="dataLink @(Model.CategoryID.HasValue && Model.CategoryID.Value == category.ID ? "active" : string.Empty)">@category.Name</a>
                             }
                         </div>
                     </div>
@@ -105,7 +107,7 @@
 		}
 	});
 	function GetData(dUrl){
-		showLoader();
+		//showLoader();
 		$.ajax({
 			url: dUrl,
 			data: {
@@ -120,7 +122,7 @@
         	alert("FAIL");
         })
 		.always(function(){
-			hideLoader();
+			//hideLoader();
 		});
 	}
 	function PriceRangeChange(){
