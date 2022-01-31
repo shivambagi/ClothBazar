@@ -77,6 +77,10 @@
     <Compile Include="Migrations\202201270926272_minor_change.Designer.cs">
       <DependentUpon>202201270926272_minor_change.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201310739118_uncommented_CategoryID_inproduct.cs" />
+    <Compile Include="Migrations\202201310739118_uncommented_CategoryID_inproduct.Designer.cs">
+      <DependentUpon>202201310739118_uncommented_CategoryID_inproduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202201270926272_minor_change.resx">
       <DependentUpon>202201270926272_minor_change.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201310739118_uncommented_CategoryID_inproduct.resx">
+      <DependentUpon>202201310739118_uncommented_CategoryID_inproduct.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

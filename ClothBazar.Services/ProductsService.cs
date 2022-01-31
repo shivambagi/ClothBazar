@@ -183,6 +183,36 @@ namespace ClothBazar.Services
             }
         }
 
+        public List<Product> GetProducts(string search, int pageNo, int pageSize)
+        {
+            //int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            using (var context = new CBContext())
+            {
+                if (string.IsNullOrEmpty(search) == false)
+                {
+                    //combination of serach and paging linq query
+                    return context.Products.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower()))
+                        .OrderBy(x => x.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(x => x.Category).ToList();
+                }
+                return context.Products.OrderBy(x => x.ID).Skip((pageNo - 1) * pageSize).Take(pageSize).Include(x => x.Category).ToList();
+            }
+        }
+
+        public int GetProductsCount(string search)
+        {
+            //int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            using (var context = new CBContext())
+            {
+                if (string.IsNullOrEmpty(search) == false)
+                {
+                    return context.Products.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower())).Count();
+                }
+                return context.Products.Count();
+            }
+        }
+
         public List<Product> GetProductsByCategory(int categoryID, int pageSize)
         {
             using (var context = new CBContext())

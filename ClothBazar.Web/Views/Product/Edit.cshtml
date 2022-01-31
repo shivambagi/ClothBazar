@@ -82,23 +82,62 @@
 
 
     $("#updateBtn").click(function () {
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Edit", "Product")',//'/Product/Edit',
-            data: $("#editProduct").serialize()
-        })
-            .done(function (response) {
-                $("#tableContainer").html(response);
-                $("#actionContainer").html("");
-                focusAction("tableContainer");
-            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
-                alert("fail");
-            });
+        if ($("#editProduct").valid()) {        
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edit", "Product")',//'/Product/Edit',
+                data: $("#editProduct").serialize()
+            })
+                .done(function (response) {
+                    $("#tableContainer").html(response);
+                    $("#actionContainer").html("");
+                    focusAction("tableContainer");
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    alert("fail");
+                });
+        }
+        else {
+            swal({
+                title: "Something went wrong",
+                text: "Please enter valid requiried details",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
     });
 
     $("#cancelBtn").click(function () {
         $("#actionContainer").html("");
         focusAction("tableContainer");
+    });
+
+    $('#editProduct').validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 500
+            },
+            Price: {
+                range: [1, 10000000]
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required',
+                minlength: 'Minimum length is 3',
+                maxlength: 'Maximum length is 50'
+            },
+            Description: {
+                maxlength: 'Maximum length is 500'
+            },
+            Price: {
+                range: 'Price should be between 1 - 10000000'
+            }
+        }
     });
 </script>

@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label>Price</label>
-                <input class="form-control" name="Price" />
+                <input class="form-control" name="Price" value="0"/>
             </div>
             <div class="form-group">
                 <label>Image</label>
@@ -50,26 +50,26 @@
 
 
 @*<form id="createProduct">
-    <label>Category</label>
-    <select name="CategoryID">
-        @foreach (var category in Model)
-        {
-            <option value="@category.ID">@category.Name</option>
-        }
-    </select>
-    <br />
-    <label>Name</label>
-    <input name="Name" />
-    <br />
-    <label>Description</label>
-    <input name="Description" />
-    <br />
-    <label>Price</label>
-    <input name="Price" />
-    <br />
-    <button id="saveBtn" type="button">Save</button>
+        <label>Category</label>
+        <select name="CategoryID">
+            @foreach (var category in Model)
+            {
+                <option value="@category.ID">@category.Name</option>
+            }
+        </select>
+        <br />
+        <label>Name</label>
+        <input name="Name" />
+        <br />
+        <label>Description</label>
+        <input name="Description" />
+        <br />
+        <label>Price</label>
+        <input name="Price" />
+        <br />
+        <button id="saveBtn" type="button">Save</button>
 
-</form>*@
+    </form>*@
 
 <script>
     $("#imageUpload").change(function () {
@@ -103,23 +103,64 @@
 
 
     $("#saveBtn").click(function () {
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Create", "Product")',//'/Product/Create',
-            data: $("#createProduct").serialize()
-        })
-            .done(function (response) {
-                $("#tableContainer").html(response);
-                $("#actionContainer").html("");
-                focusAction("tableContainer");
-            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
-                alert("fail");
-            });
+        debugger;
+        if ($("#createProduct").valid()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create", "Product")',//'/Product/Create',
+                data: $("#createProduct").serialize()
+            })
+                .done(function (response) {
+                    $("#tableContainer").html(response);
+                    $("#actionContainer").html("");
+                    focusAction("tableContainer");
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    alert("fail");
+                });
+        }
+        else {
+            swal({
+                title: "Something went wrong",
+                text: "Please enter valid requiried details",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
     });
 
     $("#cancelBtn").click(function () {
         $("#actionContainer").html("");
         focusAction("tableContainer");
+    });
+
+
+    $('#createProduct').validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 500
+            },
+            Price: {
+                range:[1,10000000]
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required',
+                minlength: 'Minimum length is 3',
+                maxlength: 'Maximum length is 50'
+            },
+            Description: {
+                maxlength: 'Maximum length is 500'
+            },
+            Price: {
+                range: 'Price should be between 1 - 10000000'
+            }
+        }
     });
 </script>
