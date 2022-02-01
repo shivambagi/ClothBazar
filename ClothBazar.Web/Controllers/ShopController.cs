@@ -1,4 +1,5 @@
-﻿using ClothBazar.Services;
+﻿using ClothBazar.Entities;
+using ClothBazar.Services;
 using ClothBazar.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -89,20 +90,49 @@ namespace ClothBazar.Web.Controllers
             CheckoutViewModel model = new CheckoutViewModel();
 
             var CartProductsCookie = Request.Cookies["CartProducts"];
-            if(CartProductsCookie != null)
-            {
-                //var productIDs = CartProductsCookie.Value;
-                //var ids = productIDs.Split('-');
-                //List<int> pIDs = ids.Select(x => int.Parse(x)).ToList();
-                ////above thing done in one line below
 
+            if (CartProductsCookie != null && !string.IsNullOrEmpty(CartProductsCookie.Value))
+            {
                 model.CartProductIDs = CartProductsCookie.Value.Split('-').Select(x => int.Parse(x)).ToList();
 
-                model.CartProducts = productService.GetProducts(model.CartProductIDs);
+                model.CartProducts = ProductsService.Instance.GetProducts(model.CartProductIDs);
+
                 model.User = UserManager.FindById(User.Identity.GetUserId());
             }
 
             return View(model);
+        }
+
+        public JsonResult PlaceOrder(string productIDs)
+        {
+            JsonResult result = new JsonResult();
+            result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+
+            if (!string.IsNullOrEmpty(productIDs))
+            {
+                var productQuantities = productIDs.Split('-').Select(x => int.Parse(x)).ToList();
+
+                var boughtProducts = ProductsService.Instance.GetProducts(productQuantities.Distinct().ToList());
+
+                Order newOrder = new Order();
+                newOrder.UserID = User.Identity.GetUserId();
+                newOrder.OrderedAt = DateTime.Now;
+                newOrder.Status = "Pending";
+                newOrder.TotalAmount = boughtProducts.Sum(x => x.Price * productQuantities.Where(productID => productID == x.ID).Count());
+
+                newOrder.OrderItems = new List<OrderItem>();
+                newOrder.OrderItems.AddRange(boughtProducts.Select(x => new OrderItem() { ProductID = x.ID, Quantity = productQuantities.Where(productID => productID == x.ID).Count() }));
+
+                var rowsEffected = ShopService.Instance.SaveOrder(newOrder);
+
+                result.Data = new { Success = true, Rows = rowsEffected };
+            }
+            else
+            {
+                result.Data = new { Success = false };
+            }
+
+            return result;
         }
     }
 }

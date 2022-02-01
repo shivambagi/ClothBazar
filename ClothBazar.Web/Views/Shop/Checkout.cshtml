@@ -76,7 +76,7 @@
         		updateCartProducts();
         		swal("Done", "Your Order has been placed.", "success").then((value) => {
         			window.location = '@Url.Action("Index", "Shop")';
-        		});;
+        		});
         	}
         	else{
         		swal("Failed", "Unable to place order.", "warning");
