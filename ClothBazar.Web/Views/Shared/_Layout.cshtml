@@ -72,12 +72,7 @@
                                 <button type="submit" class="header-search-submit" title="Search">Search</button>
                             </form>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="box-login">
-                                <a class="icon_login" href="#"></a>
-                            </li>
-                        }
+
                         <li class="box-cart nav-top-cart-wrapper">
                             <a class="icon_cart nav-cart-trigger active" href="@Url.Action("Checkout","Shop")"><span id="cartProductsCount">0</span></a>
                         </li>
@@ -94,7 +89,65 @@
                                 <li>
                                     <a href="@Url.Action("Checkout","Shop")">CHECKOUT</a>
                                 </li>
+                                <li>
+                                    <a>USER</a>
+                                    <ul class="submenu">
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            if (User.IsInRole("User"))
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("UserOrderIndex","Order",new { pageNo = 1 })">Orders</a>
+                                                </li>
+                                                <li>
+                                                    @*<a href="@Url.Action("LogOff", "Account")">LogOff</a>*@
+
+                                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                                    }
+                                                </li>
+                                            }
+                                            else if (User.IsInRole("Admin"))
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index","Order",new { pageNo = 1 })">Orders</a>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Index","Category")">Categories</a>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Index","Product")">Products</a>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Index","Admin")">Admin</a>
+                                                </li>
+                                                <li>
+                                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                                    }
+                                                </li>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Login","Account")">Login</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("Register","Account")">Register</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+
                             </ul>
+
+
                         </nav><!-- /.mainnav -->
                     </div><!-- /.nav-wrap -->
                 </div><!-- /.container-fluid -->

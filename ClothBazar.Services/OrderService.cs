@@ -51,6 +51,21 @@ namespace ClothBazar.Services
             }
         }
 
+        public List<Order> UserSearchOrders(string currentuserId, int pageNo, int pageSize)
+        {
+            using (var context = new CBContext())
+            {
+                var orders = context.Orders.ToList();
+
+                if (!string.IsNullOrEmpty(currentuserId))
+                {
+                    orders = orders.Where(x => x.UserID.ToLower().Contains(currentuserId.ToLower())).ToList();
+                }
+
+                return orders.Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+            }
+        }
+
         public Order GetOrderByID(int ID)
         {
             using (var context = new CBContext())

@@ -42,6 +42,7 @@ namespace ClothBazar.Web.Controllers
 
 
         // GET: Order
+        [Authorize(Roles = "Admin")]
         public ActionResult Index(string userID, string status, int? pageNo)
         {
             OrderViewModel model = new OrderViewModel();
@@ -49,7 +50,7 @@ namespace ClothBazar.Web.Controllers
             model.Status = status;
 
             pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
-
+            
             var pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
 
             model.Orders = OrderService.Instance.SearchOrders(userID, status, pageNo.Value, pageSize);
@@ -60,7 +61,7 @@ namespace ClothBazar.Web.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int ID)
         {
             OrderDetailsViewModel model = new OrderDetailsViewModel();
@@ -76,7 +77,7 @@ namespace ClothBazar.Web.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         public JsonResult ChangeStatus(string status, int ID)
         {
             JsonResult result = new JsonResult();
@@ -85,6 +86,27 @@ namespace ClothBazar.Web.Controllers
             result.Data = new { Success = OrderService.Instance.UpdateOrderStatus(ID, status) };
 
             return result;
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult UserOrderIndex(int? pageNo)
+        {
+            UserOrderViewModel model = new UserOrderViewModel();
+
+            string currentuserId = User.Identity.GetUserId();
+            model.Name = User.Identity.GetUserName();
+
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+
+            var pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            model.Orders = OrderService.Instance.UserSearchOrders(currentuserId, pageNo.Value, pageSize);
+
+            var totalRecords = model.Orders.Count();
+
+            model.Pager = new Pager(totalRecords, pageNo, pageSize);
+
+            return View(model);
         }
     }
 }

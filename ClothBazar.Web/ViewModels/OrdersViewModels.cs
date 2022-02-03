@@ -21,4 +21,11 @@ namespace ClothBazar.Web.ViewModels
         public ApplicationUser OrderBy { get; set; }
         public List<string> AvailableStatuses { get; set; }
     }
+
+    public class UserOrderViewModel
+    {
+        public List<Order> Orders { get; set; }
+        public Pager Pager { get; set; }
+        public string Name { get; set; }
+    }
 }

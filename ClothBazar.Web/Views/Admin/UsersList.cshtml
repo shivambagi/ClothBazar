@@ -1,0 +1,181 @@
+﻿@model UsersListViewModel
+@using Microsoft.AspNet.Identity.EntityFramework;
+@using Microsoft.AspNet.Identity;
+@using ClothBazar.Web.Models;
+
+<div>
+    <form method="post">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Search</label>
+                    <input class="form-control" id="searchTxt" type="search" value="@Model.SearchTerm" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Action</label>
+                    <div class="row">
+                        <div class="col-md-4 pr-0">
+                            <button id="searchUserBtn" class="form-control btn btn-primary" type="button">Search</button>
+                        </div>
+                        <div class="col-md-4 pr-0">
+                            <button id="resetUserBtn" class="form-control btn btn-primary" type="button">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="font-weight-bold">User Name</th>
+                <th class="font-weight-bold">Email</th>
+                <th class="font-weight-bold">Role</th>
+                <th class="wrap-td font-weight-bold">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Users != null && Model.Users.Count > 0)
+            {
+                foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.Name</td>
+                        <td>
+                            @user.Email
+                        </td>
+                        <td>
+                            @using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+                            {
+                                var rolesForUser = userManager.GetRoles(@user.Id);
+                                @rolesForUser[0]
+                            }
+                        </td>
+                        <td class="wrap-td">
+                            <button class="editBtn" data-id="@user.Id">Edit</button>
+                            <button class="deleteBtn" data-id="@user.Id">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="3" class="text-danger">No Categories found</td></tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        @if (Model.Pager != null && Model.Pager.TotalPages > 1)
+        {
+
+            if (Model.Pager.CurrentPage > 1)
+            {
+                <button class="pageButtons" data-pageno="1">First</button>
+                <button class="pageButtons" data-pageno="@(Model.Pager.CurrentPage - 1)">Previous</button>
+            }
+
+            for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+            {
+                string activeClass = Model.Pager.CurrentPage == page ? "active bg-info" : string.Empty;
+
+                <button class="@activeClass pageButtons" data-pageno="@page">@page</button>
+            }
+
+            if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+            {
+                <button class="pageButtons" data-pageno="@(Model.Pager.CurrentPage + 1)">Next</button>
+                <button class="pageButtons" data-pageno="@Model.Pager.EndPage">Last</button>
+            }
+        }
+    </div>
+</div>
+
+
+
+<script>
+    $(".pageButtons").click(function () {
+        var searchValue = '@Model.SearchTerm'
+        $.ajax({
+            url: '@Url.Action("UsersList", "Admin")',
+            data: { search: searchValue, pageNo: $(this).attr("data-pageNo") }
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $("#searchUserBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+        $.ajax({
+            url: '@Url.Action("UsersList", "Admin")',
+            data: { search: searchValue }
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $("#resetUserBtn").click(function () {
+        var searchValue = ''
+        $.ajax({
+            url: '@Url.Action("UsersList", "Admin")',
+            data: { search: searchValue }
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $(".editBtn").click(function () {
+        $.ajax({
+            url: '@Url.Action("Edit", "Admin")',
+            data: { ID: $(this).attr("data-id") }
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+
+                focusAction("actionContainer");
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $(".deleteBtn").click(function () {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete", "Admin")',
+                        data: { ID: $(this).attr("data-id") }
+                    })
+                        .done(function (response) {
+                            $("#tableContainer").html(response);
+                            swal("The user has been deleted!", {
+                                icon: "success",
+                            });
+                        }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                            alert("fail");
+                        });
+                }
+            });
+    });
+</script>

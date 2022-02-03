@@ -1,0 +1,109 @@
+﻿@model EditUserViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit User</h2>
+
+<form id="editUser">
+    <input name="ID" value="@Model.ID" hidden />
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" name="Name" value="@Model.Name" />
+            </div>
+            <div class="form-group">
+                <label>Roles</label>
+                <select class="form-control" name="RoleID">
+                    @foreach (var role in Model.Roles)
+                    {
+                        var selected = role.Id == Model.UserRole.RoleId ? "selected" : string.Empty;
+                        <option value="@role.Id" @selected>@role.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" name="Email" value="@Model.Email" />
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input class="form-control" name="PhoneNumber" value="@Model.PhoneNumber" />
+            </div>
+            <button id="updateBtn" class="btn btn-primary" type="button">Update</button>
+            <button id="cancelBtn" class="btn btn-primary" type="button">Cancel</button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+    $("#updateBtn").click(function () {
+        if ($("#editUser").valid()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edit", "Admin")',
+                data: $("#editUser").serialize()
+            })
+                .done(function (response) {
+                    $("#tableContainer").html(response);
+                    $("#actionContainer").html("");
+                    focusAction("tableContainer");
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    alert("fail");
+                });
+        }
+        else {
+            swal({
+                title: "Something went wrong",
+                text: "Please enter valid requiried details",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
+    });
+
+    $("#cancelBtn").click(function () {
+        $("#actionContainer").html("");
+        focusAction("tableContainer");
+    });
+
+    $('#editUser').validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Email: {
+                required: true,
+                maxlength: 500
+            },
+            PhoneNumber: {
+                required: true,
+                minlength: 1,
+                maxlength: 10
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required',
+                minlength: 'Minimum length is 3',
+                maxlength: 'Maximum length is 50'
+            },
+            Email: {
+                required: 'Email is required',
+                maxlength: 'Maximum length is 500'
+            },
+            PhoneNumber: {
+                required: 'PhoneNumber is required',
+                minlength: 'Minimum length is 1',
+                maxlength: 'Maximum length is 10'
+            }
+        }
+    });
+</script>
