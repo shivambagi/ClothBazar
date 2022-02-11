@@ -22,6 +22,7 @@ namespace ClothBazar.Web.CustomsFilter
             };
             Log.Error(controller + "-" + actionName + "-" + exceptionmessage);
             filterContext.ExceptionHandled = true;
+
         }
     }
 }
