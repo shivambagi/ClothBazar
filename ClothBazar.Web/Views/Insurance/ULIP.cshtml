@@ -1,0 +1,326 @@
+﻿@model ULIPViewModel
+@{
+    ViewBag.Title = "ULIP";
+    var dob = Model.DOB.ToString();
+    var dobs = Model.DOB.ToShortDateString();
+}
+
+<style>
+    .error {
+        color: red;
+    }
+
+</style>
+
+<form id="inputUlip">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Select Product</label>
+                <select id="productChange" class="form-control" name="InsuranceProduct">
+                    @foreach (var product in Model.InsuranceProduct)
+                    {
+                        var selected = product.ID == Model.ProductID ? "selected" : string.Empty;
+                        <option value="@product.ID" @selected>@product.ProductName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Name</label>
+                <input id="nameChange" value="@Model.Name" class="form-control" name="Name" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="genderChange" class="form-control" name="Gender">
+                    @foreach (var gender in Model.Gender)
+                    {
+                        var selected = gender.ID == Model.GenderID ? "selected" : string.Empty;
+                        <option value="@gender.ID" @selected>@gender.GenderName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Date Of Birth</label>
+                @Html.TextBoxFor(x => x.DateOfBirth, new
+                {
+                    @id = "dobChange",
+                    @type = "date",
+                    @value = Model.DOB.ToShortDateString(),
+                    @class = "form-control"
+                })
+                <span id="displayage"></span>
+                @*<input id="dobChange" type="date" value="@Model.DOB.ToShortDateString()" class="form-control" name="DateOfBirth" />*@
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Smoker</label>
+            <div class="input-group">
+                
+                    <label><input id="smokerChange" name="Smoker" type="radio" value="True" /> True</label>
+                
+                
+                    <label><input id="smokerChange" name="Smoker" type="radio" value="False" /> False</label>
+                
+            </div>
+            @*<input id="smokerChange" type="radio" class="form-control" name="Smoker" value="true">
+        <label for="html">YES</label><br>
+        <input id="smokerChange" type="radio" class="form-control" name="Smoker" value="false">
+        <label for="css">NO</label><br>*@
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Premium Payment Term</label>
+                <select id="pptChange" class="form-control" name="PremiumPaymentTerm">
+                    @foreach (var ppt in Model.PremiumPaymentTerm)
+                    {
+                        var selected = ppt == Model.PPT ? "selected" : string.Empty;
+                        <option value="@ppt" @selected>@ppt</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Policy Term</label>
+                <select id="pptChange" class="form-control" name="PolicyTerm">
+                    @foreach (var term in Model.PolicyTerm)
+                    {
+                        <option value="@term">@term</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Sum Assured</label>
+                <input class="form-control" name="SumAssured" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Modal Premium</label>
+                <input class="form-control" name="ModalPremium" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Frequency</label>
+                <select id="frequencyValue" class="form-control" name="Frequency">
+                    @foreach (var frequency in Model.Frequency)
+                    {
+                        <option value="@frequency.ID">@frequency.FrequencyName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <button id="calculateBtn" class="btn btn-primary" type="button">Generate Quotation</button>
+
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        $("#displayage").attr('hidden', false);
+
+        setDateLimits();
+
+        $("#dobChange").change(function () {
+            var dob = $("#dobChange").val().trim();
+            var calculatedDob = GetAge(dob);
+            $("#displayage").removeAttr('hidden');
+            $("#displayage").text(calculatedDob + " years");
+        });
+    });
+
+    function setDateLimits() {
+
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = (year - 18) + '-' + month + '-' + day;
+        var minDate = (year - 75) + '-' + month + '-' + day;
+        $('#dobChange').attr('max', maxDate);
+        $('#dobChange').attr('min', minDate);
+    };
+
+    function GetAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    $("#productChange").change(function () {
+        var valproductid = $("#productChange").val();
+        var valdob = $("#dobChange").val();
+        
+        $.ajax({
+            url: '@Url.Action("ULIP", "Insurance")',
+            data: {
+                productid: valproductid,
+                dob: valdob,
+                smoke: $("#smokerChange").val(),
+                genderid: $("#genderChange").val(),
+
+            }            
+        })
+            .done(function (response) {
+                $("#inputContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+
+    })
+
+    $("#pptChange").change(function () {
+        var valproductid = $("#productChange").val();
+        var valppt = $("#pptChange").val();
+        var valdob = $("#dobChange").val();
+
+        $.ajax({
+            url: '@Url.Action("ULIP", "Insurance")',
+            data: {
+                productid: valproductid,
+                ppt: valppt,
+                dob: valdob,
+                smoke: $("#smokerChange").val(),
+                genderid: $("#genderChange").val(),
+            }
+        })
+            .done(function (response) {
+                $("#inputContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    })
+
+    $("#calculateBtn").click(function () {
+
+        var dataulip = $("#inputUlip").serialize();
+        debugger;
+        if ($("#inputUlip").valid()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Result", "Insurance")',//'/Product/Create',
+                data: dataulip
+            })
+                .done(function (response) {
+                    debugger;
+                    if (response.Success == false) {
+                        swal({
+                            text: response.errormessage,
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                    } else {
+                        $("#resultContainer").html(response);
+                        focusAction("resultContainer");
+                    }                    
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    debugger;
+                    swal({
+                        title: "Something went wrong",
+                        text: errorThrown,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                });
+        }
+        else {
+            swal({
+                title: "Something went wrong",
+                text: "Please enter valid requiried details",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
+    });
+
+    $('#inputUlip').validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 1,
+                maxlength: 50
+            },
+            Smoker: {
+                required: true                
+            },
+            DateOfBirth: {
+                required: true,
+                date: true
+            },
+            ModalPremium: {
+                required: true,
+                number: true
+            },
+            SumAssured: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required',
+                minlength: 'Minimum length is 1',
+                maxlength: 'Maximum length is 50'
+            },
+            Smoker: {
+                required: 'Select one option'
+            },
+            DateOfBirth: {
+                required: 'Select your birthdate'
+            },
+            ModalPremium: {
+                required: 'This field is required',
+                number: 'Enter a valid number'
+            },
+            SumAssured: {
+                required: 'This field is required',
+                number: 'Enter a valid number'
+            }
+        }
+    });
+</script>

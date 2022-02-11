@@ -26,5 +26,12 @@ namespace ClothBazar.DataBase
         public DbSet<Config> Configurations { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+
+        //-------------------------------------------------------------------------------------
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<Frequency> Frequencies { get; set; }
+        public DbSet<InsuranceProduct> InsuranceProducts { get; set; }
+        public DbSet<ULIP> ULIPS { get; set; }
+
     }
 }
