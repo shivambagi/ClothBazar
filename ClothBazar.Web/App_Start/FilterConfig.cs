@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using ClothBazar.Web.CustomsFilter;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ClothBazar.Web
@@ -8,6 +9,7 @@ namespace ClothBazar.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CustomException());
         }
     }
 }

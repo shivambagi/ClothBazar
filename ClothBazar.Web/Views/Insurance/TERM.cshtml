@@ -1,0 +1,123 @@
+﻿@model TermViewModel
+@{
+    ViewBag.Title = "ULIP";
+}
+
+<form id="inputUlip">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Select Product</label>
+                <select class="form-control" name="InsuranceProduct">
+                    @foreach (var product in Model.InsuranceProduct)
+                    {
+                        <option value="@product.ID">@product.ProductName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" name="Name" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Gender</label>
+                <select class="form-control" name="Gender">
+                    @foreach (var gender in Model.Gender)
+                    {
+                        <option value="@gender.ID">@gender.GenderName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Date Of Birth</label>
+                <input class="form-control" name="DateOfBirth" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Smoker</label>
+                <input class="form-control" name="Smoker" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Premium Payment Term</label>
+                <input class="form-control" name="PremiumPaymentTerm" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Policy Term</label>
+                <input class="form-control" name="PolicyTerm" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Sum Assured</label>
+                <input class="form-control" name="SumAssured" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Modal Premium</label>
+                <input class="form-control" name="ModalPremium" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Frequency</label>
+                <select class="form-control" name="Frequency">
+                    @foreach (var frequency in Model.Frequency)
+                    {
+                        <option value="@frequency.ID">@frequency.FrequencyName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>ADB Sum Assured</label>
+                <input class="form-control" name="ADBSumAssured" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>CI Sum Assured</label>
+                <input class="form-control" name="CISumAssured" />
+            </div>
+        </div>
+    </div>
+
+
+
+</form>

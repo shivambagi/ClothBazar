@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<section class="flat-row flat-iconbox">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title-section">
+                    <h2 class="title">Insurance</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="title-section">
+                    <button id="ulip" class="productType" style="font-size:50px;width:350px;" type="button">ULIP</button>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="title-section">
+                    <button id="term" class="productType" style="font-size:50px;width:350px;" type="button">TERM</button>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="title-section">
+                    <button id="traditional" class="productType" style="font-size:50px" type="button">TRADITIONAL</button>
+                    <a></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7">
+                <div id="inputContainer">
+
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div id="resultContainer">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    //function focusAction(controlToFocus) {
+    //    $('html, body').animate({
+    //        scrollTop: $("#" + controlToFocus).offset().top - 100
+    //    }, 1000);
+    //}
+
+    $("#ulip").click(function () {
+        $.ajax({
+            url: '@Url.Action("ULIP", "Insurance")'
+        })
+            .done(function (response) {
+                debugger;
+                $("#inputContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $("#term").click(function () {
+        $.ajax({
+            url: '@Url.Action("TERM", "Insurance")'
+        })
+            .done(function (response) {
+                debugger;
+                $("#inputContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    $("#traditional").click(function () {
+        $.ajax({
+            url: '@Url.Action("TRADITIONAL", "Insurance")'
+        })
+            .done(function (response) {
+                debugger;
+                $("#inputContainer").html(response);
+            }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("fail");
+            });
+    });
+
+    var initialLoad = true;
+
+    $(document).ready(function () {
+        debugger;
+        if (initialLoad == true) {
+                $.ajax({
+                url: '@Url.Action("ULIP", "Insurance")'
+            })
+                .done(function (response) {
+                    $("#inputContainer").html(response);
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    alert("fail");
+                });
+
+            @*$.ajax({
+                url: '@Url.Action("Result", "Insurance")'
+            })
+                .done(function (response) {
+                    $("#resultContainer").html(response);
+                }).fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                    alert("fail");
+                });*@
+
+        }
+
+        initialLoad = false;
+
+    });
+
+    function focusAction(controlToFocus) {
+        $('html, body').animate({
+            scrollTop: $("#" + controlToFocus).offset().top - 100
+        }, 1000);
+    }
+
+</script>

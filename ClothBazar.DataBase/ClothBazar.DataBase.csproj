@@ -89,6 +89,10 @@
     <Compile Include="Migrations\202202010607142_added_Quantity_in_OrderItems.Designer.cs">
       <DependentUpon>202202010607142_added_Quantity_in_OrderItems.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202202041248340_BaseInsurance_Gender_Frequency_INsuranceProducts_ULIPS.cs" />
+    <Compile Include="Migrations\202202041248340_BaseInsurance_Gender_Frequency_INsuranceProducts_ULIPS.Designer.cs">
+      <DependentUpon>202202041248340_BaseInsurance_Gender_Frequency_INsuranceProducts_ULIPS.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -132,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202202010607142_added_Quantity_in_OrderItems.resx">
       <DependentUpon>202202010607142_added_Quantity_in_OrderItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202041248340_BaseInsurance_Gender_Frequency_INsuranceProducts_ULIPS.resx">
+      <DependentUpon>202202041248340_BaseInsurance_Gender_Frequency_INsuranceProducts_ULIPS.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

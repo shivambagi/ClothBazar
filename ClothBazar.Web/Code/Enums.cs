@@ -12,4 +12,11 @@ namespace ClothBazar.Web.Code
         PriceLowToHigh = 3,
         PriceHighToLow = 4
     }
+
+    public enum Gender
+    {
+        Male = 1,
+        Female = 2,
+        Transgender = 3
+    }
 }

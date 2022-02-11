@@ -49,4 +49,5 @@ namespace ClothBazar.Web.ViewModels
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
     }
+
 }
